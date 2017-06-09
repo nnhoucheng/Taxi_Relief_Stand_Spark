@@ -11,4 +11,4 @@ if __name__ == '__main__':
         head = f.select(sys.argv[3])
         with open(sys.argv[2], 'w') as fo:
             for h in head:
-                fo.write(h)
+                fo.write('%s'%h)
