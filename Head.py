@@ -4,11 +4,11 @@ import sys
 if __name__ == '__main__':
     sc = SparkContext()
     if len(sys.argv) == 4:
-        open('path.txt', 'r') as fi:
+        with open('path.txt', 'r') as fi:
             files = fi.readlines()
         path = files[0] + files[sys.argv[1]]
         f = sc.textFile(path, use_unicode=False).cache()
         head = f.select(sys.argv[3])
-        open(sys.argv[2], 'w') as fo:
+        with open(sys.argv[2], 'w') as fo:
             for h in head:
                 fo.write(h)
