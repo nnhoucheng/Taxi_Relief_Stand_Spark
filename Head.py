@@ -9,6 +9,6 @@ if __name__ == '__main__':
         path = files[0] + files[sys.argv[1]]
         f = sc.textFile(path, use_unicode=False).cache()
         head = f.select(sys.argv[3])
-        with open(sys.argv[2], 'w') as fo:
+        with open(sys.argv[2], 'wb') as fo:
             for h in head:
                 fo.write('%s'%h)
