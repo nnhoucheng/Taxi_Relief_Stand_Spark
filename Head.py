@@ -7,6 +7,5 @@ if __name__ == '__main__':
         path = '/gws/projects/project-taxi_capstone_2016/data/TLC/TPEP2015/BreadCrumb_CMT.csv'
         f = sc.textFile(path, use_unicode=False).cache()
         head = f.take(10)
-        with open(sys.argv[1], 'wb') as fo:
-            for h in head:
-                fo.write('%s'%h)
+        rdd = sc.parallelize(head)
+        rdd.saveAsTextFile(sys.argv[1])
