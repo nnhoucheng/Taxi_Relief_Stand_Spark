@@ -8,4 +8,4 @@ if __name__ == '__main__':
         f = sc.textFile(path, use_unicode=False).cache()
         head = f.take(10)
         rdd = sc.parallelize(head)
-        rdd.coalesce(1).saveAsTextFile(sys.argv[1])
+        rdd.saveAsTextFile('tmp')
