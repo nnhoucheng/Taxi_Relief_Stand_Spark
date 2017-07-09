@@ -60,7 +60,7 @@ if __name__ == '__main__':
                 return False
 
         idles = []
-        time_thresold = 10*60 # time thershold
+        time_thresold = 30*60 # time thershold
         flag = False
         start = 0
         for i,row in enumerate(rows):
