@@ -80,13 +80,14 @@ if __name__ == '__main__':
     ### 4: number of passengers in taxi
     path = '/gws/projects/project-taxi_capstone_2016/data/breadcrumb_nad83'
     Breadcrumb = sc.textFile(path, use_unicode=False).cache()
-    rdd = sc.parallelize([1,2,3])
     
     # Step 1: Filter out customer trip and time period
     BC = Breadcrumb.mapPartitions(parseCSV)
+    rdd = sc.parallelize(BC.take(10))
     rdd.saveAsTextFile('capstone/p1')
     # Step 2: Find idle points    
     Idles = BC.groupByKey().mapValues(findidle)
+    rdd = sc.parallelize(Idles.take(10))
     rdd.saveAsTextFile('capstone/p2')
     # Step 3: Save idle points
     Idles.mapPartitions(mapback).saveAsTextFile('capstone/tmp')
