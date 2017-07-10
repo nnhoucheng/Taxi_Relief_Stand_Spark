@@ -11,6 +11,7 @@ from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 import csv
 
 def parseCSV(list_of_records):
+    import csv
     reader = csv.reader(list_of_records)
     for row in reader:
         ## Filter out N/A
@@ -23,6 +24,7 @@ def parseCSV(list_of_records):
 # end{parseCSV}
 
 def findidle(values):
+    import numpy as np
     ## Transform timestamp to seconds
     def trans(timestamp):
         return int(timestamp[:2])*3600 + int(timestamp[2:4])*60 + int(timestamp[4:])
@@ -60,15 +62,16 @@ def findidle(values):
 # end{findidle}                  
 
 def mapback(list_of_records):
+    def trans_(time):
+        hour = time//3600
+        time = time%3600
+        minute = time//60
+        second = time%60
+        return ('0'+str(hour))[-2:] + ('0'+str(minute))[-2:] + ('0'+str(second))[-2:]
+    
     for kvs in list_of_records:
         k, vs = kvs
         output = k[0] + ',' + k[1]
-        def trans_(time):
-            hour = time//3600
-            time = time%3600
-            minute = time//60
-            second = time%60
-            return ('0'+str(hour))[-2:] + ('0'+str(minute))[-2:] + ('0'+str(second))[-2:]
         for v in vs:
             yield output + trans_(v[2]) + ',' + str(v[3]) + ',' + str(int(round(v[0]))) + ',' + str(int(round(v[1])))
 # end{mapback}
