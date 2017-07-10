@@ -90,6 +90,6 @@ if __name__ == '__main__':
     rdd = sc.parallelize(Idles.take(10))
     rdd.saveAsTextFile('capstone/p2')
     # Step 3: Save idle points
-    Idles.mapPartitions(mapback).saveAsTextFile('capstone/tmp')
+    #Idles.mapPartitions(mapback).saveAsTextFile('capstone/tmp')
 # end{main}    
     
