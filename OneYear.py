@@ -56,7 +56,7 @@ def findidle(values):
             time = rows[i-1][0] - rows[start][0]
             if time >= time_thresold:
                 idles.append((np.mean(rows[start:i,1]), np.mean(rows[start:i,2]), rows[start][0], time))
-    return (idles)
+    return idles
 # end{findidle}                  
 
 def mapback(list_of_records):
