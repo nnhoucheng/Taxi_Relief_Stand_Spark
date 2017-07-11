@@ -24,7 +24,7 @@ def findidle(values):
     rows = []
     for v in values:
         rows.append([trans(v[0]), int(v[1]), int(v[2])]) 
-        rows = np.array(sorted(rows, key=lambda x:x[0]))
+    rows = np.array(sorted(rows, key=lambda x:x[0]))
     
     ## Check if the speed within the threshold
     def checkspeed(row1, row2, speed_threshold = 10*3.28084/120):
@@ -83,13 +83,13 @@ if __name__ == '__main__':
     
     # Step 1: Filter out customer trip and time period
     BC = Breadcrumb.mapPartitions(parseCSV)
-    rdd = sc.parallelize(BC.take(10))
-    rdd.saveAsTextFile('capstone/p1')
+    #rdd = sc.parallelize(BC.take(10))
+    #rdd.saveAsTextFile('capstone/p1')
     # Step 2: Find idle points    
     Idles = BC.groupByKey().mapValues(findidle)
-    rdd = sc.parallelize(Idles.take(10))
-    rdd.saveAsTextFile('capstone/p2')
+    #rdd = sc.parallelize(Idles.take(10))
+    #rdd.saveAsTextFile('capstone/p2')
     # Step 3: Save idle points
-    #Idles.mapPartitions(mapback).saveAsTextFile('capstone/tmp')
+    Idles.mapPartitions(mapback).saveAsTextFile('capstone/tmp')
 # end{main}    
     
