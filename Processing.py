@@ -94,21 +94,21 @@ if __name__ == '__main__':
     Breadcrumb = sc.textFile(path, use_unicode=False).cache()
     ## Vehichle ID Data:
     ### shl_number for green, medallion for yellow
-    green_path = '/user/ch3019/capstone/shl_number.csv'
-    yellow_path = '/user/ch3019/capstone/medallion.csv'
-    green = sc.textFile(green_path, use_unicode=False).cache()
-    yellow = sc.textFile(yellow_path, use_unicode=False).cache()
+    #green_path = '/user/ch3019/capstone/shl_number.csv'
+    #yellow_path = '/user/ch3019/capstone/medallion.csv'
+    #green = sc.textFile(green_path, use_unicode=False).cache()
+    #yellow = sc.textFile(yellow_path, use_unicode=False).cache()
     
     # Step 1: Find Idle points
     idles = Breadcrumb.mapPartitions(parse)
     ## merge with green and yellow taxi vehicle ID
-    g_ = idles.map(lambda x: (x[0], x[1:])).join(green.map(lambda x: (x, "g")))
-    y_ = idles.map(lambda x: (x[0], x[1:])).join(yellow.map(lambda x: (x, "y")))
-    columns_g = sc.parallelize(["shl_number,start_datetime,duration,longitude,latitude,classifer"])
-    columns_y = sc.parallelize(["medallion,start_datetime,duration,longitude,latitude,classifer"])
+    #g_ = idles.map(lambda x: (x[0], x[1:])).join(green.map(lambda x: (x, "g")))
+    #y_ = idles.map(lambda x: (x[0], x[1:])).join(yellow.map(lambda x: (x, "y")))
+    #columns_g = sc.parallelize(["shl_number,start_datetime,duration,longitude,latitude,classifer"])
+    #columns_y = sc.parallelize(["medallion,start_datetime,duration,longitude,latitude,classifer"])
     ## Save to file
-    idles.saveAsTextFile('capstone/idles')
-    columns_g.union(g_.map(saveformat)).saveAsTextFile('capstone/green')
-    columns_y.union(y_.map(saveformat)).saveAsTextFile('capstone/yellow')
+    idles.map(lambda x: ','.join(map(str, x))).saveAsTextFile('capstone/idles')
+    #columns_g.union(g_.map(saveformat)).saveAsTextFile('capstone/green')
+    #columns_y.union(y_.map(saveformat)).saveAsTextFile('capstone/yellow')
         
 # end{main}
