@@ -1,5 +1,6 @@
 from pyspark import SparkContext
 import csv
+import numpy as np
 
 def trans(timestamp):
     return int(timestamp[:2])*3600 + int(timestamp[2:4])*60 + int(timestamp[4:])
