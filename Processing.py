@@ -47,27 +47,26 @@ def parse(records):
                     currentRow = [trans(row[1][6:]), int(row[2]), int(row[3])]
                     
                     if cvID == vehicleID and cdate == date:
-                        ff = checkspeed(lastRow, currentRow)
-                        if ff:
+                        if checkspeed(lastRow, currentRow):
                             countpoints += 1
                             sumtime += currentRow[0] - lastRow[0]
                             sumlng += currentRow[1]
                             sumlat += currentRow[2]
                         elif countpoints > 0:
-                            if sumtime > time_thresold:
+                            if sumtime >= time_thresold:
                                 yield (vehicleID, date+trans_(lastRow[0]-sumtime), sumtime, 
                                        int(round(1.*sumlng/countpoints)), 
-                                       int(round(1.*sumlng/countpoints)))
+                                       int(round(1.*sumlat/countpoints)))
                             countpoints = 0
                             sumlng = 0
                             sumlat = 0
                             sumtime = 0
                     else:
                         if countpoints > 0:
-                            if sumtime > time_thresold:
+                            if sumtime >= time_thresold:
                                 yield (vehicleID, date+trans_(lastRow[0]-sumtime), sumtime, 
                                        int(round(1.*sumlng/countpoints)), 
-                                       int(round(1.*sumlng/countpoints)))
+                                       int(round(1.*sumlat/countpoints)))
                             countpoints = 0
                             sumlng = 0
                             sumlat = 0
@@ -75,7 +74,7 @@ def parse(records):
                         vehicleID = cvID
                         date = cdate
                     
-        lastRow = currentRow
+                    lastRow = currentRow
                        
 def saveformat(kvs):
     return kvs[0] + ',' + ','.join(map(str, kvs[1]))
