@@ -1,0 +1,49 @@
+from pyspark import SparkContext
+import csv
+import numpy as np
+import rtree
+import geopandas as gpd
+from fiona.crs import from_epsg
+
+def parse(records):
+    reader = csv.reader(records)
+    
+    relief_path = '/user/ch3019/capstone/new_york_city_taxi_relief_stations.geojson'
+    relief = gpd.GeoDataFrame.from_file(relief_path)
+    relief.crs = from_epsg(4326)
+    relief = relief.to_crs(epsg=2263)
+    relief.drop_duplicates(subset=["location"], inplace=True)
+    relief["buffer"] = relief.apply(lambda x: x.geometry.buffer(distance), axis=1)
+    relief = relief.set_geometry("buffer")
+    ##
+    index = rtree.Rtree()
+    for idx, geometry in enumerate(relief.geometry):
+        index.insert(idx, geometry.bounds)
+    
+    for row in reader:
+        date = row[1][:6]
+        x,y = int(row[3]), int(row[4])
+        potentialMatches = index.intersection((x, y, x, y))
+        
+        match = None
+        for idx in potentialMatches:
+            if relief.geometry[idx].contains(p):
+                match = idx
+                break
+        if match:
+            yield ((match, date), row[2])
+            
+def saveformat(kvs):
+    return ','.join(map(str, kvs[0])) + ',' + ','.join(map(str, kvs[1]))
+            
+if __name__ == '__main__':
+    sc = SparkContext()
+    
+    path = '/user/ch3019/capstone/idles'
+    idles = sc.textFile(path, use_unicode=False).cache()
+    
+    usage = idles.mapPartitions(parse).groupByKeys().mapValues(lambda vs: len(vs), sum(vs))
+    usgae_column = sc.parallelize(["relief_stand_idx,car_usage,time_usage"])
+    usgae_column.union(usage.map(saveformat)).saveAsTextFile('capstone/usage)
+    
+# end{main}
