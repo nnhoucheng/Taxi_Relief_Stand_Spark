@@ -44,6 +44,6 @@ if __name__ == '__main__':
     
     usage = idles.mapPartitions(parse).groupByKeys().mapValues(lambda vs: len(vs), sum(vs))
     usgae_column = sc.parallelize(["relief_stand_idx,car_usage,time_usage"])
-    usgae_column.union(usage.map(saveformat)).saveAsTextFile('capstone/usage)
+    usgae_column.union(usage.map(saveformat)).saveAsTextFile('capstone/usage')
     
 # end{main}
