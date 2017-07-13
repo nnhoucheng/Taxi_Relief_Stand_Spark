@@ -127,7 +127,7 @@ if __name__ == '__main__':
     ### 31: pickup_latitude
     ### 33: dropoff_longitude
     ### 34: dropoff_latitude
-    TPEP_path = '/gws/projects/project-taxi_capstone_2016/data/TLC/LPEP2015/TripRecords_'
+    TPEP_path = '/gws/projects/project-taxi_capstone_2016/data/TLC/TPEP2015/TripRecords_'
     yellow = sc.textFile(TPEP_path+'CMT.csv', use_unicode=False).union(
              sc.textFile(TPEP_path+'VTS.csv', use_unicode=False))
     yellow_tr = yellow.mapPartitions(parseYellow).mapPartitions(tr_hex)
