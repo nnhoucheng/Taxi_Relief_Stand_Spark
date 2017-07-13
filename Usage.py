@@ -4,6 +4,7 @@ import numpy as np
 import rtree
 import geopandas as gpd
 from fiona.crs import from_epsg
+import shapely.geometry as geom
 
 def parse(records):
     reader = csv.reader(records)
@@ -28,7 +29,7 @@ def parse(records):
         
         match = None
         for idx in potentialMatches:
-            if relief.geometry[idx].contains(p):
+            if relief.geometry[idx].contains(geom.Point(x,y)):
                 match = idx
                 break
         if match:
