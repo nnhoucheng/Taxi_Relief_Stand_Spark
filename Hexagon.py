@@ -37,25 +37,31 @@ def parseGreen(records):
     reader = csv.reader(records) 
     for row in reader:
         if len(row) == 37:
-            pickup_date = row[2][8:10] + row[2][:2] + row[2][3:5]
-            dropoff_date = row[13][8:10] + row[13][:2] + row[13][3:5]
-            pickup_lng = float(row[29])
-            pickup_lat = float(row[30])
-            dropoff_lng = float(row[32])
-            dropoff_lat = float(row[33])
-            yield(pickup_date, pickup_lng, pickup_lat, dropoff_date, dropoff_lng, dropoff_lat)
+            try:
+                pickup_date = row[2][8:10] + row[2][:2] + row[2][3:5]
+                dropoff_date = row[13][8:10] + row[13][:2] + row[13][3:5]
+                pickup_lng = float(row[29])
+                pickup_lat = float(row[30])
+                dropoff_lng = float(row[32])
+                dropoff_lat = float(row[33])
+                yield(pickup_date, pickup_lng, pickup_lat, dropoff_date, dropoff_lng, dropoff_lat)
+            except ValueError:
+                pass
 
 def parseYellow(records):
     reader = csv.reader(records)
     for row in reader:
         if len(row) == 38:
-            pickup_date = row[0][8:10] + row[0][:2] + row[0][3:5]
-            dropoff_date = row[11][8:10] + row[11][:2] + row[11][3:5]
-            pickup_lng = float(row[30])
-            pickup_lat = float(row[31])
-            dropoff_lng = float(row[33])
-            dropoff_lat = float(row[34])
-            yield(pickup_date, pickup_lng, pickup_lat, dropoff_date, dropoff_lng, dropoff_lat)
+            try:
+                pickup_date = row[0][8:10] + row[0][:2] + row[0][3:5]
+                dropoff_date = row[11][8:10] + row[11][:2] + row[11][3:5]
+                pickup_lng = float(row[30])
+                pickup_lat = float(row[31])
+                dropoff_lng = float(row[33])
+                dropoff_lat = float(row[34])
+                yield(pickup_date, pickup_lng, pickup_lat, dropoff_date, dropoff_lng, dropoff_lat)
+            except ValueError:
+                pass
 
 def tr_hex(records):
     hexagon = gpd.GeoDataFrame.from_file('Hexagon_clipped.geojson')
