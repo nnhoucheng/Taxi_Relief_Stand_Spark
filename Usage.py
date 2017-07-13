@@ -31,8 +31,16 @@ def parse(records):
                 match = idx
                 break
         if match:
-            yield ((match, date), row[2])
-            
+            yield ((match, date), int(row[2]))
+
+def stat(values):
+    time_usage = 0
+    car_usage = 0
+    for v in values:
+        car_usage += 1
+        time_usage += v
+    return (car_usage, time_usage)
+
 def saveformat(kvs):
     return ','.join(map(str, kvs[0])) + ',' + ','.join(map(str, kvs[1]))
             
@@ -42,7 +50,7 @@ if __name__ == '__main__':
     path = '/user/ch3019/capstone/idles'
     idles = sc.textFile(path, use_unicode=False).cache()
     
-    usage = idles.mapPartitions(parse).groupByKey().mapValues(lambda vs: len(vs), sum(vs))
+    usage = idles.mapPartitions(parse).groupByKey().mapValues(stat)
     usgae_column = sc.parallelize(["relief_stand_idx,car_usage,time_usage"])
     usgae_column.union(usage.map(saveformat)).saveAsTextFile('capstone/usage')
     
