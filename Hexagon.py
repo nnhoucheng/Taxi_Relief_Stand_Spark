@@ -71,7 +71,7 @@ def tr_hex(records):
         p = geom.Point(proj(row[1], row[2]))
         potentialMatches = index.intersection((p.x, p.y, p.x, p.y))
         match = None
-        for idx in potentialMatches1:
+        for idx in potentialMatches:
             if hexagon.geometry[idx].contains(p):
                 match = idx
                 break
@@ -85,7 +85,7 @@ def tr_hex(records):
         p = geom.Point(proj(row[4], row[5]))
         potentialMatches = index.intersection((p.x, p.y, p.x, p.y))
         match = None
-        for idx in potentialMatches1:
+        for idx in potentialMatches:
             if hexagon.geometry[idx].contains(p):
                 match = idx
                 break
