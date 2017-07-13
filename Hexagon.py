@@ -22,7 +22,7 @@ def parseIdles(records):
         
         match = None
         for idx in potentialMatches:
-            if relief.geometry[idx].contains(p):
+            if hexagon.geometry[idx].contains(p):
                 match = idx
                 break
         if match:
