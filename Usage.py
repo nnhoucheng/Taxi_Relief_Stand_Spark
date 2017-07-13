@@ -47,7 +47,7 @@ def saveformat(kvs):
 if __name__ == '__main__':
     sc = SparkContext()
     
-    path = '/user/ch3019/capstone/idles'
+    path = 'idles.csv'
     idles = sc.textFile(path, use_unicode=False).cache()
     
     usage = idles.mapPartitions(parse).groupByKey().mapValues(stat)
