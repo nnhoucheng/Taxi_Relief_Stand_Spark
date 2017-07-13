@@ -7,7 +7,7 @@ import shapely.geometry as geom
 
 def parseIdles(records):
     reader = csv.reader(records)
-    hexagon = gpd.GeoDataFrame.from_file('hexagon.geojson')
+    hexagon = gpd.GeoDataFrame.from_file('Hexagon_clipped.geojson')
     
     counts = {}
     index = rtree.Rtree()
@@ -33,7 +33,7 @@ def parseIdles(records):
     return count.items()   
 
 def parseGreen(records):
-    reader = csv.reader(records):    
+    reader = csv.reader(records)    
     for row in reader:
         if len(row) == 37:
             pickup_date = row[2][8:10] + row[2][:2] + row[2][3:5]
@@ -45,7 +45,7 @@ def parseGreen(records):
             yield(pickup_date, pickup_lng, pickup_lat, dropoff_date, dropoff_lng, dropoff_lat)
 
 def parseYellow(records):
-    reader = csv.reader(records):    
+    reader = csv.reader(records)  
     for row in reader:
         if len(row) == 38:
             pickup_date = row[0][8:10] + row[0][:2] + row[0][3:5]
@@ -57,7 +57,7 @@ def parseYellow(records):
             yield(pickup_date, pickup_lng, pickup_lat, dropoff_date, dropoff_lng, dropoff_lat)
 
 def tr_hex(records):
-    hexagon = gpd.GeoDataFrame.from_file('hexagon.geojson')
+    hexagon = gpd.GeoDataFrame.from_file('Hexagon_clipped.geojson')
     
     count = {}
     index = rtree.Rtree()
