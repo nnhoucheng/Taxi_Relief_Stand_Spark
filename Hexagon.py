@@ -106,7 +106,7 @@ def reducer(x,y):
     return [x[i]+y[i] for i in range(4)]
 
 def saveformat(kvs):
-    return kvs[0] + ',' + ','.join(map(str, kvs[1]))
+    return ','.join(map(str, kvs[0])) + ',' + ','.join(map(str, kvs[1]))
 
 if __name__ == '__main__':
     sc = SparkContext()
