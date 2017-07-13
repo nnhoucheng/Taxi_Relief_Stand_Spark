@@ -27,8 +27,8 @@ def parseIdles(records):
                 break
         if match:
             k = (hexagon.GRID_ID[match], date)
-            v = count.get(k,(0,0,0,0))
-            count[k] = (v[0]+1, v[1]+int(row[2]), 0, 0)
+            v = counts.get(k,(0,0,0,0))
+            counts[k] = (v[0]+1, v[1]+int(row[2]), 0, 0)
             #yield ((match, date), int(row[2]))
     return count.items()   
 
@@ -59,7 +59,7 @@ def parseYellow(records):
 def tr_hex(records):
     hexagon = gpd.GeoDataFrame.from_file('Hexagon_clipped.geojson')
     
-    count = {}
+    counts = {}
     index = rtree.Rtree()
     for idx, geometry in zip(hexagon.index.values, hexagon.geometry):
         index.insert(idx, geometry.bounds)
@@ -76,8 +76,8 @@ def tr_hex(records):
                 break
         if match:
             k = (hexagon.GRID_ID[match], row[0])
-            v = count.get(k,(0,0,0,0))
-            count[k] = (0, 0, v[0]+1, v[1])
+            v = counts.get(k,(0,0,0,0))
+            counts[k] = (0, 0, v[0]+1, v[1])
             #yield ((hexagon['GRID_ID'][match], row[0]), (1,0))
             
         ## dropoff
@@ -91,10 +91,10 @@ def tr_hex(records):
                 break
         if match:
             k = (hexagon.GRID_ID[match], row[3])
-            v = count.get(k,(0,0,0,0))
-            count[k] = (0, 0, v[0], v[1]+1)
+            v = counts.get(k,(0,0,0,0))
+            counts[k] = (0, 0, v[0], v[1]+1)
             #yield ((hexagon['GRID_ID'][match], row[3]), (0,1))
-    return count.items()
+    return counts.items()
 
 def reducer(x,y):
     return [x[i]+y[i] for i in range(4)]
