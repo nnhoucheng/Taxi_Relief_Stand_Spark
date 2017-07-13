@@ -30,7 +30,7 @@ def parseIdles(records):
             v = counts.get(k,(0,0,0,0))
             counts[k] = (v[0]+1, v[1]+int(row[2]), 0, 0)
             #yield ((match, date), int(row[2]))
-    return count.items()   
+    return counts.items()   
 
 def parseGreen(records):
     reader = csv.reader(records)    
