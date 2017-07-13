@@ -4,6 +4,7 @@ import numpy as np
 import rtree
 import geopandas as gpd
 import shapely.geometry as geom
+import pyproj
 
 def parseIdles(records):
     reader = csv.reader(records)
@@ -33,31 +34,32 @@ def parseIdles(records):
     return counts.items()   
 
 def parseGreen(records):
-    reader = csv.reader(records)    
+    reader = csv.reader(records) 
     for row in reader:
         if len(row) == 37:
             pickup_date = row[2][8:10] + row[2][:2] + row[2][3:5]
             dropoff_date = row[13][8:10] + row[13][:2] + row[13][3:5]
-            pickup_lng = int(row[29])
-            pickup_lat = int(row[30])
-            dropoff_lng = int(row[32])
-            dropoff_lat = int(row[33])
+            pickup_lng = float(row[29])
+            pickup_lat = float(row[30])
+            dropoff_lng = float(row[32])
+            dropoff_lat = float(row[33])
             yield(pickup_date, pickup_lng, pickup_lat, dropoff_date, dropoff_lng, dropoff_lat)
 
 def parseYellow(records):
-    reader = csv.reader(records)  
+    reader = csv.reader(records)
     for row in reader:
         if len(row) == 38:
             pickup_date = row[0][8:10] + row[0][:2] + row[0][3:5]
             dropoff_date = row[11][8:10] + row[11][:2] + row[11][3:5]
-            pickup_lng = int(row[30])
-            pickup_lat = int(row[31])
-            dropoff_lng = int(row[33])
-            dropoff_lat = int(row[34])
+            pickup_lng = float(row[30])
+            pickup_lat = float(row[31])
+            dropoff_lng = float(row[33])
+            dropoff_lat = float(row[34])
             yield(pickup_date, pickup_lng, pickup_lat, dropoff_date, dropoff_lng, dropoff_lat)
 
 def tr_hex(records):
     hexagon = gpd.GeoDataFrame.from_file('Hexagon_clipped.geojson')
+    proj = pyproj.Proj(init='epsg:2263', preserve_units=True)
     
     counts = {}
     index = rtree.Rtree()
@@ -66,9 +68,8 @@ def tr_hex(records):
     
     for row in records:
         ## pickup
-        x,y = int(row[1]), int(row[2])
-        potentialMatches = index.intersection((x, y, x, y))
-        p= geom.Point(x,y)        
+        p = geom.Point(proj(row[1], row[2]))
+        potentialMatches = index.intersection((p.x, p.y, p.x, p.y))
         match = None
         for idx in potentialMatches1:
             if hexagon.geometry[idx].contains(p):
@@ -81,9 +82,8 @@ def tr_hex(records):
             #yield ((hexagon['GRID_ID'][match], row[0]), (1,0))
             
         ## dropoff
-        x,y = int(row[4]), int(row[5])
-        potentialMatches = index.intersection((x, y, x, y))
-        p= geom.Point(x,y)        
+        p = geom.Point(proj(row[4], row[5]))
+        potentialMatches = index.intersection((p.x, p.y, p.x, p.y))
         match = None
         for idx in potentialMatches1:
             if hexagon.geometry[idx].contains(p):
