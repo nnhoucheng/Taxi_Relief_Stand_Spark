@@ -19,17 +19,18 @@ def parse(records):
     relief = relief.set_geometry("buffer")
     ##
     index = rtree.Rtree()
-    for idx, geometry in enumerate(relief.geometry):
+    for idx, geometry in zip(relief.index.values, relief.geometry):
         index.insert(idx, geometry.bounds)
     
     for row in reader:
         date = row[1][:6]
         x,y = int(row[3]), int(row[4])
         potentialMatches = index.intersection((x, y, x, y))
+        p = geom.Point(x,y)
         
         match = None
         for idx in potentialMatches:
-            if relief.geometry[idx].contains(geom.Point(x,y)):
+            if relief.geometry[idx].contains(p):
                 match = idx
                 break
         if match:
