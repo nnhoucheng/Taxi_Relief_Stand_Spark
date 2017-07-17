@@ -42,7 +42,7 @@ def saveformat(kvs):
 if __name__ == '__main__':
     sc = SparkContext()
     
-    idles = sc.textFile('/user/ch3019/capstone/idles', use_unicode=False).cache()
+    idles = sc.textFile('/user/ch3019/capstone/idles_2015', use_unicode=False).cache()
     Hex = idles.mapPartitions(parseIdles).reduceByKey(reducer).sortByKey()    
     
     columns = sc.parallelize(["GRID,date,idle_count,idle_time_count"])
