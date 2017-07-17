@@ -50,11 +50,11 @@ def saveformat(kvs):
 if __name__ == '__main__':
     sc = SparkContext()
     
-    path = '/user/ch3019/capstone/idles'
+    path = '/user/ch3019/capstone/idles_2015'
     idles = sc.textFile(path, use_unicode=False).cache()
     
     usage = idles.mapPartitions(parse).groupByKey().mapValues(stat)
     usgae_column = sc.parallelize(["relief_stand_idx,date,car_usage,time_usage"])
-    usgae_column.union(usage.sortByKey().map(saveformat)).saveAsTextFile('capstone/usage')
+    usgae_column.union(usage.sortByKey().map(saveformat)).saveAsTextFile('capstone/usage_2015')
     
 # end{main}
