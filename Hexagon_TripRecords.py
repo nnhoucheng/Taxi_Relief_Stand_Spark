@@ -56,7 +56,7 @@ def tr_hex(records):
             k = (hexagon.GRID_ID[match], row[0])
             v = counts.get(k,(0,0))
             counts[k] = (v[0]+1, v[1])
-            #yield ((hexagon['GRID_ID'][match], row[0]), (1,0))
+            #yield ((hexagon['GRID_ID'][match], row[0]))
             
         ## dropoff
         p = geom.Point(proj(row[4], row[5]))
@@ -70,7 +70,7 @@ def tr_hex(records):
             k = (hexagon.GRID_ID[match], row[3])
             v = counts.get(k,(0,0))
             counts[k] = (v[0], v[1]+1)
-            #yield ((hexagon['GRID_ID'][match], row[3]), (0,1))
+            #yield ((hexagon['GRID_ID'][match], row[3]))
     return counts.items()
 
 def reducer(x,y):
@@ -92,8 +92,8 @@ if __name__ == '__main__':
     LPEP_path = '/gws/projects/project-taxi_capstone_2016/data/TLC/LPEP2015/TripRecord_'
     green = sc.textFile(LPEP_path+'CMT.csv', use_unicode=False).union(
             sc.textFile(LPEP_path+'VTS.csv', use_unicode=False))
-    #green_tr = green.mapPartitions(parseGreen).mapPartitions(tr_hex)
-    green.mapPartitions(parseGreen).map(lambda x:','.join(map(str,x))).saveAsTextFile('capstone/green')
+    green_tr = green.mapPartitions(parseGreen).mapPartitions(tr_hex)
+    #green.mapPartitions(parseGreen).map(lambda x:','.join(map(str,x))).saveAsTextFile('capstone/green')
     
     ## TPEP TripRecord Data 38 columns
     ### 0: tpep_pickup_datetime
@@ -105,10 +105,11 @@ if __name__ == '__main__':
     TPEP_path = '/gws/projects/project-taxi_capstone_2016/data/TLC/TPEP2015/TripRecord_'
     yellow = sc.textFile(TPEP_path+'CMT.csv', use_unicode=False).union(
              sc.textFile(TPEP_path+'VTS.csv', use_unicode=False))
-    #yellow_tr = yellow.mapPartitions(parseYellow).mapPartitions(tr_hex)
-    yellow.mapPartitions(parseYellow).map(lambda x:','.join(map(str,x))).saveAsTextFile('capstone/yellow')
+    yellow_tr = yellow.mapPartitions(parseYellow).mapPartitions(tr_hex)
+    #yellow.mapPartitions(parseYellow).map(lambda x:','.join(map(str,x))).saveAsTextFile('capstone/yellow')
     
-    ##    
-    #columns = sc.parallelize(["GRID,date,idle_count,idle_time_count,pickup_count,dropoff_count"])
-    #columns.union(Hex.map(saveformat)).saveAsTextFile('capstone/hexagon')
+    ##
+    Hex = yellow_tr.union(green_tr).reduceByKey(reducer).sortByKey()
+    columns = sc.parallelize(["GRID,date,pickup_count,dropoff_count"])
+    columns.union(Hex.map(saveformat)).saveAsTextFile('capstone/hexagon_pd')
 # end{main}
