@@ -11,7 +11,7 @@ def parseGreen(records):
     for row in reader:
         if len(row) == 37:
             if len(row[2]) == 19 and len(row[13]) == 19:
-                if row[2][6:10] == '2015' and row[13][6:10] == '2015'
+                if row[2][6:10] == '2015' and row[13][6:10] == '2015':
                     pickup_date = row[2][8:10] + row[2][:2] + row[2][3:5]
                     dropoff_date = row[13][8:10] + row[13][:2] + row[13][3:5]
                     pickup_lng = float(row[29])
@@ -25,7 +25,7 @@ def parseYellow(records):
     for row in reader:
         if len(row) == 38:
             if len(row[0]) == 19 and len(row[11]) == 19:
-                if row[0][6:10] == '2015' and row[11][6:10] == '2015'
+                if row[0][6:10] == '2015' and row[11][6:10] == '2015':
                     pickup_date = row[0][8:10] + row[0][:2] + row[0][3:5]
                     dropoff_date = row[11][8:10] + row[11][:2] + row[11][3:5]
                     pickup_lng = float(row[30])
