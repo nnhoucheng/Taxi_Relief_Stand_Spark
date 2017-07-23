@@ -10,11 +10,12 @@ def parse(records):
     reader = csv.reader(records)
     
     distance = 1/.3048*50 # setup the distance parameter
-    relief_path = 'new_york_city_taxi_relief_stations.geojson'
+    #relief_path = 'new_york_city_taxi_relief_stations.geojson'
+    relief_path = 'relief_stands_23July.geojson'
     relief = gpd.GeoDataFrame.from_file(relief_path)
     relief.crs = from_epsg(4326)
     relief = relief.to_crs(epsg=2263)
-    relief.drop_duplicates(subset=["location"], inplace=True)
+    #relief.drop_duplicates(subset=["location"], inplace=True)
     relief["buffer"] = relief.apply(lambda x: x.geometry.buffer(distance), axis=1)
     relief = relief.set_geometry("buffer")
     ##
@@ -55,6 +56,6 @@ if __name__ == '__main__':
     
     usage = idles.mapPartitions(parse).groupByKey().mapValues(stat)
     usgae_column = sc.parallelize(["relief_stand_idx,date,car_usage,time_usage"])
-    usgae_column.union(usage.sortByKey().map(saveformat)).saveAsTextFile('capstone/usage_2015')
+    usgae_column.union(usage.sortByKey().map(saveformat)).saveAsTextFile('capstone/usage_2015_July23')
     
 # end{main}
