@@ -57,6 +57,7 @@ if __name__ == '__main__':
     
     usage = idles.mapPartitions(parse).groupByKey().mapValues(stat)
     usgae_column = sc.parallelize(["relief_stand_idx,date,car_usage,time_usage"])
-    usgae_column.union(usage.sortByKey().map(saveformat)).saveAsTextFile('capstone/usage_2015_July23')
+    #usgae_column.union(usage.sortByKey().map(saveformat)).saveAsTextFile('capstone/usage_2015_July23')
+    usgae_column.union(usage.sortByKey().map(saveformat)).saveAsTextFile('capstone/usage_2015_TRS_149')
     
 # end{main}
