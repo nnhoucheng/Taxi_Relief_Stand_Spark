@@ -11,7 +11,8 @@ def parse(records):
     
     distance = 1/.3048*50 # setup the distance parameter
     #relief_path = 'new_york_city_taxi_relief_stations.geojson'
-    relief_path = 'relief_stands_23July.geojson'
+    #relief_path = 'relief_stands_23July.geojson'
+    relief_path = 'TRS_149.geojson'
     relief = gpd.GeoDataFrame.from_file(relief_path)
     relief.crs = from_epsg(4326)
     relief = relief.to_crs(epsg=2263)
