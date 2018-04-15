@@ -1,3 +1,3 @@
 # CUSP 2017 Capstone Project - Taxi Relief Stand
 
-## CUSP cluster spark script 
+These are the PySpark script running in the high performing platform - CUSP cluster.
